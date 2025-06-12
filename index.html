@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weatheria | Your Personal Weather Expert</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <!-- Video background container -->
+    <div class="video-container">
+        <video id="bg-video-1" class="bg-video active" autoplay muted loop playsinline>
+            <source id="video-source-1" src="videos/clear-day.mp4" type="video/mp4">
+        </video>
+        <video id="bg-video-2" class="bg-video" autoplay muted loop playsinline>
+            <source id="video-source-2" src="" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+    </div>
+
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Search section -->
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" id="city-search" class="form-control" placeholder="Search for a city...">
+                <button id="search-btn" class="btn btn--primary">Search</button>
+            </div>
+            <button id="use-location" class="btn btn--secondary" title="Use my location">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="22" y1="12" x2="18" y2="12"></line>
+                    <line x1="6" y1="12" x2="2" y2="12"></line>
+                    <line x1="12" y1="6" x2="12" y2="2"></line>
+                    <line x1="12" y1="22" x2="12" y2="18"></line>
+                </svg>
+            </button>
+            <div class="unit-toggle">
+                <button id="unit-toggle" class="btn btn--secondary">Switch to °F</button>
+            </div>
+
+        </div>
+
+
+        <!-- Weather info card -->
+        <div class="weather-card card">
+            <div id="loading-indicator" class="loading-indicator">
+                <div class="loading-spinner"></div>
+                <p>Fetching weather data...</p>
+            </div>
+
+            <div id="weather-content" class="weather-content hidden">
+                <div class="weather-header">
+                    <div>
+                        <h1 id="city-name">--</h1>
+                        <p id="date-time">--</p>
+                    </div>
+                    <div class="weather-icon">
+                        <img id="weather-icon-img" src="" alt="Weather icon">
+                    </div>
+                </div>
+
+                <div class="weather-body">
+                    <div class="temperature-container">
+                        <h2 id="temperature">--°C</h2>
+                        <p id="feels-like">Feels like: --°C</p>
+                    </div>
+                    <div class="weather-description">
+                        <p id="weather-condition">--</p>
+                        <div class="weather-details">
+                            <div class="detail-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                                </svg>
+                                <span id="humidity">Humidity: --%</span>
+                            </div>
+                            <div class="detail-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2">
+                                    </path>
+                                </svg>
+                                <span id="wind-speed">Wind: -- m/s</span>
+                            </div>
+                            <div class="detail-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span id="pressure">Pressure: -- hPa</span>
+                            </div>
+                            <div class="detail-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M17 18a5 5 0 0 0-10 0"></path>
+                                    <line x1="12" y1="2" x2="12" y2="9"></line>
+                                    <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line>
+                                    <line x1="1" y1="18" x2="3" y2="18"></line>
+                                    <line x1="21" y1="18" x2="23" y2="18"></line>
+                                    <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line>
+                                    <line x1="23" y1="22" x2="1" y2="22"></line>
+                                    <polyline points="8 6 12 2 16 6"></polyline>
+                                </svg>
+                                <span id="sunrise-sunset">Sunrise: -- | Sunset: --</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="forecast-container">
+                    <h3>5-Day Forecast</h3>
+                    <div id="forecast-cards" class="forecast-cards">
+                        <!-- Forecast cards will be inserted here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="error-message" class="error-message hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p id="error-text">Unable to fetch weather data. Please try again.</p>
+            </div>
+        </div>
+
+        <!-- City tabs -->
+        <div class="city-tabs" id="city-tabs">
+            <!-- City tabs will be inserted here dynamically -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
