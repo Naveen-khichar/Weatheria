@@ -979,19 +979,14 @@ body {
 /* Fade transitions for background video */
 .bg-video {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   object-fit: cover;
-  transition: opacity 1s ease;
-  opacity: 0;
-  top: 0;
-  left: 0;
   z-index: -1;
-}
-
-.bg-video.active {
   opacity: 1;
-  z-index: -1;
+  transition: opacity 0.8s ease;
 }
 
 
