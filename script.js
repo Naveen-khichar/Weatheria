@@ -73,6 +73,25 @@ class WeatherApp {
         this.setupEventListeners();
         document.getElementById('unit-toggle').addEventListener('click', () => this.toggleUnits());
         this.addCity({ name: "Mumbai", lat: 19.0144, lon: 72.8479 });
+        this.preloadVideos();
+    }
+
+    preloadVideos() {
+        const videos = [
+            "clear-day", "clear-night", "cloudy-day", "cloudy-night",
+            "rain-day", "rain-night", "storm-day", "storm-night",
+            "snow-day", "snow-night", "fog-day", "fog-night"
+        ];
+
+        videos.forEach(name => {
+            fetch(`videos/${name}.mp4`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`${name} not found`);
+                    return res.blob(); // Forces cache
+                })
+                .then(() => console.log(`${name} preloaded`))
+                .catch(err => console.error(err.message));
+        });
     }
 
     setupEventListeners() {
@@ -195,36 +214,62 @@ class WeatherApp {
         });
     }
 
-    updateBackgroundVideo(weatherData) {
-    const now = new Date();
-    const isDay = now > new Date(weatherData.sys.sunrise * 1000) && now < new Date(weatherData.sys.sunset * 1000);
-    const time = isDay ? 'day' : 'night';
-    const condition = CONFIG.weatherConditions[weatherData.weather[0].main] || CONFIG.weatherConditions.Clear;
-    const videoUrl = condition[time];
+    getNormalizedCondition(main) {
+        switch (main) {
+            case 'Clear':
+                return 'Clear';
+            case 'Clouds':
+                return 'Cloudy';
+            case 'Rain':
+            case 'Drizzle':
+                return 'Rain';
+            case 'Thunderstorm':
+                return 'Storm';
+            case 'Snow':
+                return 'Snow';
+            case 'Mist':
+            case 'Fog':
+            case 'Smoke':
+            case 'Haze':
+            case 'Dust':
+            case 'Sand':
+            case 'Ash':
+            case 'Squall':
+            case 'Tornado':
+                return 'Mist';
+            default:
+                return 'Clear';
+        }
+    }
 
-    const video1 = document.getElementById('bg-video-1');
-    const video2 = document.getElementById('bg-video-2');
-    const source1 = document.getElementById('video-source-1');
-    const source2 = document.getElementById('video-source-2');
+   updateBackgroundVideo(weatherData) {
+        const now = new Date();
+        const isDay = now > new Date(weatherData.sys.sunrise * 1000) && now < new Date(weatherData.sys.sunset * 1000);
+        const time = isDay ? 'day' : 'night';
 
-    const activeVideo = video1.classList.contains('active') ? video1 : video2;
-    const inactiveVideo = video1.classList.contains('active') ? video2 : video1;
-    const activeSource = video1.classList.contains('active') ? source1 : source2;
-    const inactiveSource = video1.classList.contains('active') ? source2 : source1;
+        const main = this.getNormalizedCondition(weatherData.weather[0].main);
+        const videoUrl = `videos/${main.toLowerCase()}-${time}.mp4`;
 
-    // Avoid unnecessary switching
-    if (activeSource.src.includes(videoUrl)) return;
+        if (this.currentVideoPath === videoUrl) return;
 
-    // Load new video on the inactive player
-    inactiveSource.src = videoUrl;
-    inactiveVideo.load();
+        const videoElement = document.getElementById('bg-video');
+        const sourceElement = document.getElementById('bg-video-source');
 
-    inactiveVideo.oncanplay = () => {
-        inactiveVideo.play().catch(console.error);
-        activeVideo.classList.remove('active');
-        inactiveVideo.classList.add('active');
-    };
-}
+        
+        videoElement.style.opacity = 0;
+
+        setTimeout(() => {
+            sourceElement.src = videoUrl;
+            videoElement.load();
+
+            videoElement.oncanplay = () => {
+                videoElement.play().then(() => {
+                    videoElement.style.opacity = 1;
+                    this.currentVideoPath = videoUrl;
+                }).catch(console.error);
+            };
+        }, 500); 
+    }
 
 
 
