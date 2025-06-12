@@ -990,6 +990,8 @@ body {
 }
 
 
+
+
 /* Weather card entrance animations */
 @keyframes slideInLeft {
   0% { transform: translateX(-100px); opacity: 0; }

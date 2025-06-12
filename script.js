@@ -39,7 +39,7 @@ const CONFIG = {
 };
 
 const elements = {
-    
+
     citySearch: document.getElementById('city-search'),
     searchBtn: document.getElementById('search-btn'),
     geoBtn: document.getElementById('use-location'),
@@ -65,18 +65,17 @@ class WeatherApp {
     constructor() {
         this.cities = [];
         this.currentCity = null;
-        this.currentVideoPath = null;
         this.unit = 'metric';
         this.init();
     }
 
     init() {
+
         this.setupEventListeners();
         document.getElementById('unit-toggle').addEventListener('click', () => this.toggleUnits());
         this.addCity({ name: "Mumbai", lat: 19.0144, lon: 72.8479 });
         this.preloadVideos();
     }
-
     preloadVideos() {
         const videos = [
             "clear-day", "clear-night", "cloudy-day", "cloudy-night",
@@ -94,7 +93,6 @@ class WeatherApp {
                 .catch(err => console.error(err.message));
         });
     }
-
     setupEventListeners() {
         elements.searchBtn.addEventListener('click', () => this.handleCitySearch());
         elements.geoBtn.addEventListener('click', () => this.getUserLocation());
@@ -204,7 +202,7 @@ class WeatherApp {
             const icon = item.weather[0].icon;
 
             const tempUnit = this.unit === 'metric' ? '°C' : '°F';
-        const card = document.createElement('div');
+            const card = document.createElement('div');
             card.className = 'forecast-card';
             card.innerHTML = `
                 <div class="forecast-day">${date.toLocaleDateString('en-US', { weekday: 'short' })}</div>
@@ -239,11 +237,15 @@ class WeatherApp {
             case 'Tornado':
                 return 'Mist';
             default:
-                return 'Clear';
+                return 'Clear'; // fallback
         }
     }
 
-   updateBackgroundVideo(weatherData) {
+
+
+
+    updateBackgroundVideo(weatherData) {
+        this.currentVideoPath = null;
         const now = new Date();
         const isDay = now > new Date(weatherData.sys.sunrise * 1000) && now < new Date(weatherData.sys.sunset * 1000);
         const time = isDay ? 'day' : 'night';
@@ -256,7 +258,7 @@ class WeatherApp {
         const videoElement = document.getElementById('bg-video');
         const sourceElement = document.getElementById('bg-video-source');
 
-        
+        // Fade out first
         videoElement.style.opacity = 0;
 
         setTimeout(() => {
@@ -269,8 +271,11 @@ class WeatherApp {
                     this.currentVideoPath = videoUrl;
                 }).catch(console.error);
             };
-        }, 500); 
+        }, 500); // allow fade out before switching
     }
+
+
+
 
 
 
@@ -278,7 +283,7 @@ class WeatherApp {
         elements.cityTabs.innerHTML = '';
         this.cities.forEach(city => {
             const tab = document.createElement('div');
-           tab.className = 'city-tab' + ((this.currentCity && this.currentCity.name === city.name) ? ' active' : '');
+            tab.className = 'city-tab' + ((this.currentCity && this.currentCity.name === city.name) ? ' active' : '');
             tab.innerHTML = `<span>${city.name}</span><button class="city-tab-close">×</button>`;
             tab.querySelector('span').addEventListener('click', () => this.loadWeatherData(city));
             tab.querySelector('button').addEventListener('click', () => this.removeCity(city));
@@ -320,7 +325,7 @@ class WeatherApp {
         });
     }
 
-    
+
     toggleUnits() {
         this.unit = this.unit === 'metric' ? 'imperial' : 'metric';
         document.getElementById('unit-toggle').textContent = `Switch to ${this.unit === 'metric' ? '°F' : '°C'}`;
