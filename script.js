@@ -65,6 +65,7 @@ class WeatherApp {
     constructor() {
         this.cities = [];
         this.currentCity = null;
+        this.currentVideoPath = null;
         this.unit = 'metric';
         this.init();
     }
